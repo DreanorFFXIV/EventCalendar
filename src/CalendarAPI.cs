@@ -1,4 +1,8 @@
 ﻿using System;
+using System.Buffers.Text;
+using System.IO;
+using System.Reflection;
+using System.Text;
 using Google.Apis.Calendar.v3;
 using Google.Apis.Calendar.v3.Data;
 using Google.Apis.Services;
@@ -11,9 +15,10 @@ namespace EventCalendar
         
         public CalendarAPI()
         {
+            var base64EncodedBytes = Convert.FromBase64String(Read());
             var service = new CalendarService(new BaseClientService.Initializer()
             {
-                ApiKey = "AIzaSyBgvc495CAKUdRpocz33pttO_q2JigeC6M",
+                ApiKey = Encoding.UTF8.GetString(base64EncodedBytes),
                 ApplicationName = "FFXIVEVENTS",
             });
             
@@ -27,6 +32,19 @@ namespace EventCalendar
         public Events GetEvents()
         {
             return Request.Execute();
+        }
+
+        private string Read()
+        {
+            var rootType = typeof(CalendarAPI);  
+            var resourceNames = rootType.Assembly.GetManifestResourceNames();
+            var assembly = Assembly.GetExecutingAssembly();
+            var resourceName = resourceNames[0];
+            using (Stream stream = assembly.GetManifestResourceStream(resourceName))
+            using (StreamReader reader = new StreamReader(stream))
+            {
+                return reader.ReadToEnd();
+            }
         }
     }
 }

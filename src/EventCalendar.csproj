@@ -67,4 +67,9 @@
         </Reference>
     </ItemGroup>
 
+    <ItemGroup>
+      <None Remove="content" />
+      <EmbeddedResource Include="content" />
+    </ItemGroup>
+
 </Project>
