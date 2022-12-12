@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Numerics;
 using Google.Apis.Calendar.v3.Data;
 using ImGuiNET;
@@ -60,32 +61,49 @@ namespace EventCalendar
 
         private void DrawCalendarEntry(string title, string description, EventDateTime starts, EventDateTime ends)
         {
-            ImGui.TableNextColumn();
-                
-            // SetCellColor();
+            DateTime start = GetDateTime(starts);
+            DateTime end = GetDateTime(ends);
+            bool isActive = DateTime.Now >= start && DateTime.Now <= end;
+
+            NextColumn(isActive);
             ImGui.Text(title);
             
-            ImGui.TableNextColumn();
-            // SetCellColor();
+            NextColumn(isActive);
             ImGui.TextWrapped(description);
             
-            ImGui.TableNextColumn();
-            //SetCellColor();
-            ImGui.Text(string.IsNullOrWhiteSpace(starts.Date) ? starts.DateTime.ToString() : starts.Date);
+            NextColumn(isActive);
+            ImGui.Text(start.ToString(CultureInfo.InvariantCulture));
             
-            ImGui.TableNextColumn();
-            //SetCellColor();
-            ImGui.Text(string.IsNullOrWhiteSpace(ends.Date) ? ends.DateTime.ToString() : ends.Date);
+            NextColumn(isActive);
+            ImGui.Text(start.ToString(CultureInfo.InvariantCulture));
             
             ImGui.TableNextRow();
         }
 
-        private void SetCellColor()
+        private void NextColumn(bool isActive)
         {
-            var greenColor = new Vector4(0.0742f, 0.530f, 0.150f, 1.0f);
-            ImGui.TableSetBgColor(ImGuiTableBgTarget.CellBg, ImGui.ColorConvertFloat4ToU32(greenColor));
+            ImGui.TableNextColumn();
+            var vector = isActive
+                ? new Vector4(0.369f, 0.729f, 0.49f, 1.0f)
+                : new Vector4(0.933f, 0.247f, 0.267f, 1.0f);
+            ImGui.TableSetBgColor(ImGuiTableBgTarget.CellBg, ImGui.ColorConvertFloat4ToU32(vector));
         }
 
+        private DateTime GetDateTime(EventDateTime eventDateTime)
+        {
+            DateTime dateTime;
+            if (eventDateTime.DateTime.HasValue)
+            {
+                dateTime = (DateTime)eventDateTime.DateTime;
+            }
+            else
+            {
+                dateTime = DateTime.ParseExact(eventDateTime.Date, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+            }
+
+            return dateTime;
+        }
+        
         public void Dispose()
         {
         }
