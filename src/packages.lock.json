@@ -1,0 +1,53 @@
+{
+  "version": 1,
+  "dependencies": {
+    "net6.0-windows7.0": {
+      "DalamudPackager": {
+        "type": "Direct",
+        "requested": "[2.1.8, )",
+        "resolved": "2.1.8",
+        "contentHash": "YqagNXs9InxmqkXzq7kLveImxnodkBEicAhydMXVp7dFjC7xb76U6zGgAax4/BWIWfZeWzr5DJyQSev31kj81A=="
+      },
+      "Google.Apis.Calendar.v3": {
+        "type": "Direct",
+        "requested": "[1.58.0.2759, )",
+        "resolved": "1.58.0.2759",
+        "contentHash": "bUsrFbyuF6I2+J48F6okBeIOHJUIpeUihylgZ7PhQ/bf0jzClWrP9Vn2O+iYePakBMbx5fLbKxPZw+R4pxWBzQ==",
+        "dependencies": {
+          "Google.Apis": "1.58.0",
+          "Google.Apis.Auth": "1.58.0"
+        }
+      },
+      "Google.Apis": {
+        "type": "Transitive",
+        "resolved": "1.58.0",
+        "contentHash": "OFIWLMbxL096T6L3b0cQLSQGAxRZWIZLNkjZtaYUQ5exz67aW7+Sd+OQnzdFGrV0yyTNlMOy+j6AqmdsenJHXA==",
+        "dependencies": {
+          "Google.Apis.Core": "1.58.0"
+        }
+      },
+      "Google.Apis.Auth": {
+        "type": "Transitive",
+        "resolved": "1.58.0",
+        "contentHash": "8HAVH23c/O6ODdpedkw/2B3VqG4YKEMk0v0Sb6tEz7GRaiqGwdMntytr7iez0iFvCFDA5SkHnYDCNCIztnSMhA==",
+        "dependencies": {
+          "Google.Apis": "1.58.0",
+          "Google.Apis.Core": "1.58.0"
+        }
+      },
+      "Google.Apis.Core": {
+        "type": "Transitive",
+        "resolved": "1.58.0",
+        "contentHash": "e1QpJz6hMuxN7Whm9ORl98dV9/6kM4UC+zNHGFO/S7OVV4wglFkix9DMidzdEmo3AGrs9KZSk69N+rYHJKqn+A==",
+        "dependencies": {
+          "Newtonsoft.Json": "13.0.2"
+        }
+      },
+      "Newtonsoft.Json": {
+        "type": "Transitive",
+        "resolved": "13.0.2",
+        "contentHash": "R2pZ3B0UjeyHShm9vG+Tu0EBb2lC8b0dFzV9gVn50ofHXh9Smjk6kTn7A/FdAsC8B5cKib1OnGYOXxRBz5XQDg=="
+      }
+    }
+  }
+}
