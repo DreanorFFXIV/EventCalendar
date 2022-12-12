@@ -1,6 +1,7 @@
 using Dalamud.Game.Command;
 using Dalamud.IoC;
 using Dalamud.Plugin;
+
 // ReSharper disable PossibleNullReferenceException
 
 namespace EventCalendar
@@ -9,41 +10,38 @@ namespace EventCalendar
     {
         public string Name => "EventCalendar";
         private const string CommandName = "/events";
-        private PluginUI _pluginUi { get; init; }
-        
-        [PluginService] 
-        private DalamudPluginInterface _pluginInterface { get; set; }
+        private PluginUI PluginUi { get; init; }
 
-        [PluginService]
-        private CommandManager _commandManager { get; set; }
+        [PluginService] private DalamudPluginInterface PluginInterface { get; set; }
+
+        [PluginService] private CommandManager CommandManager { get; set; }
 
         public Plugin()
         {
-            _pluginUi = new PluginUI(this);
-            _pluginInterface.UiBuilder.Draw += DrawUI;
+            PluginUi = new PluginUI();
+            PluginInterface.UiBuilder.Draw += DrawUI;
 
-            _commandManager.AddHandler(CommandName, new CommandInfo(OnCommand)
+            CommandManager.AddHandler(CommandName, new CommandInfo(OnCommand)
             {
-                HelpMessage = "A useful message to display in /xlhelp"
+                HelpMessage = "Displays all current and upcoming events."
             });
         }
 
         public void Dispose()
         {
-            _pluginInterface.UiBuilder.Draw -= DrawUI;
-            _pluginUi.Dispose();
-            _commandManager.RemoveHandler(CommandName);
+            PluginInterface.UiBuilder.Draw -= DrawUI;
+            PluginUi.Dispose();
+            CommandManager.RemoveHandler(CommandName);
         }
 
         private void DrawUI()
         {
-            _pluginUi.Draw();
+            PluginUi.Draw();
         }
 
         private void OnCommand(string command, string args)
         {
-            // in response to the slash command, just display our main ui
-            _pluginUi.Visible = true;
+            PluginUi.Visible = true;
         }
     }
 }

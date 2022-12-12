@@ -1,53 +1,47 @@
 ﻿using System;
-using System.Numerics;
-using Dalamud.Interface.Windowing;
-using Dalamud.Plugin;
 using ImGuiNET;
-using ImGuiScene;
 
 namespace EventCalendar
 {
-	public class PluginUI : IDisposable
-	{
-		private Plugin Plugin;
-		
-		// this extra bool exists for ImGui, since you can't ref a property
-		private bool visible = false;
-		public bool Visible
-		{
-			get { return this.visible; }
-			set { this.visible = value; }
-		}
-		
-		public PluginUI(Plugin plugin)
-		{
+    public class PluginUI : IDisposable
+    {
+        private const string PublicCalendarId =
+            "5de3023ee82a703ccd7c4b71f0e34418967b28f0001cdb722cb261e11d51dc8d@group.calendar.google.com";
+        
+        // this extra bool exists for ImGui, since you can't ref a property
+        private bool _visible;
 
-			Plugin = plugin;
-		}
+        public bool Visible
+        {
+            get => _visible;
+            set => _visible = value;
+        }
 
-		public void Draw()
-		{
-			string publicId = "5de3023ee82a703ccd7c4b71f0e34418967b28f0001cdb722cb261e11d51dc8d@group.calendar.google.com";
-			DrawCalendarEntry("title", "desc", "url");
-		}
+        public PluginUI()
+        {
+        }
 
-		public void DrawCalendarEntry(string title, string description, string imgUrl)
-		{
-			ImGui.TableNextColumn();
+        public void Draw()
+        {
+            DrawCalendarEntry("title", "desc", "url");
+        }
 
-			if (description.Length > 200)
-			{
-				description = description[..200] + "...";
-			}
+        private void DrawCalendarEntry(string title, string description, string imgUrl)
+        {
+            ImGui.TableNextColumn();
 
-			ImGui.TextWrapped(description);
-    
+            if (description.Length > 200)
+            {
+                description = description[..200] + "...";
+            }
+
+            ImGui.TextWrapped(description);
+
             ImGui.TableNextRow();
         }
-		
-		public void Dispose()
-		{
-			Plugin?.Dispose();
-		}
-	}
+
+        public void Dispose()
+        {
+        }
+    }
 }
