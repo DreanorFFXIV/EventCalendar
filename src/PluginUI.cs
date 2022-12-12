@@ -16,11 +16,12 @@ namespace EventCalendar
             set => _visible = value;
         }
 
-        private CalendarAPI CalendarAPI { get; }
+        private readonly Events _events;
         
         public PluginUI()
         {
-            CalendarAPI = new CalendarAPI();
+            var calendarApi = new CalendarAPI();
+            _events = calendarApi.GetEvents();
         }
 
         public void Draw()
@@ -45,8 +46,7 @@ namespace EventCalendar
                     ImGui.TableHeadersRow();
                     ImGui.TableNextRow();
 
-                    var events = CalendarAPI.GetEvents();
-                    foreach (var eventItem in events.Items)
+                    foreach (var eventItem in _events.Items)
                     {
                         DrawCalendarEntry(eventItem.Summary, eventItem.Description, eventItem.Start, eventItem.End);
                     }
@@ -61,10 +61,12 @@ namespace EventCalendar
         private void DrawCalendarEntry(string title, string description, EventDateTime starts, EventDateTime ends)
         {
             ImGui.TableNextColumn();
-            //SetCellColor();
+                
+            // SetCellColor();
             ImGui.Text(title);
             
             ImGui.TableNextColumn();
+            // SetCellColor();
             ImGui.TextWrapped(description);
             
             ImGui.TableNextColumn();
