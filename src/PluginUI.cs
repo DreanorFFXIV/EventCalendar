@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Globalization;
 using System.Numerics;
 using Google.Apis.Calendar.v3.Data;
@@ -49,7 +50,11 @@ namespace EventCalendar
 
                     foreach (var eventItem in _events.Items)
                     {
-                        DrawCalendarEntry(eventItem.Summary, eventItem.Description, eventItem.Start, eventItem.End);
+                        var title = eventItem.Summary ?? "No title";
+                        var url = eventItem.Location ?? "https://eu.finalfantasyxiv.com/lodestone/";
+                        var desc = eventItem.Description ?? "No description";
+                        
+                        DrawCalendarEntry(title, url, desc, eventItem.Start, eventItem.End);
                     }
 
                     ImGui.EndTable();
@@ -59,23 +64,35 @@ namespace EventCalendar
             }
         }
 
-        private void DrawCalendarEntry(string title, string description, EventDateTime starts, EventDateTime ends)
+        private void DrawCalendarEntry(string title, string url, string description, EventDateTime starts, EventDateTime ends)
         {
             DateTime start = GetDateTime(starts);
             DateTime end = GetDateTime(ends);
             bool isActive = DateTime.Now >= start && DateTime.Now <= end;
 
             NextColumn(isActive);
-            ImGui.Text(title);
+            var blackColor = new Vector4(0.0f, 0.0f, 0.0f, 1.0f);
+            ImGui.PushStyleColor(ImGuiCol.Button, blackColor);
+            if (ImGui.Button(title))
+            {
+                Dalamud.Utility.Util.OpenLink(url);
+            }
+            
+            if (ImGui.IsItemHovered())
+            {
+                ImGui.BeginTooltip();
+                ImGui.Text("Click to visit link");
+                ImGui.EndTooltip();
+            }
             
             NextColumn(isActive);
             ImGui.TextWrapped(description);
             
             NextColumn(isActive);
-            ImGui.Text(start.ToString(CultureInfo.InvariantCulture));
+            ImGui.Text(start.Date.ToString(CultureInfo.InvariantCulture));
             
             NextColumn(isActive);
-            ImGui.Text(start.ToString(CultureInfo.InvariantCulture));
+            ImGui.Text(end.Date.ToString(CultureInfo.InvariantCulture));
             
             ImGui.TableNextRow();
         }
@@ -101,9 +118,9 @@ namespace EventCalendar
                 dateTime = DateTime.ParseExact(eventDateTime.Date, "yyyy-MM-dd", CultureInfo.InvariantCulture);
             }
 
-            return dateTime;
+            return dateTime.ToLocalTime();
         }
-        
+ 
         public void Dispose()
         {
         }
