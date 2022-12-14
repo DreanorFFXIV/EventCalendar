@@ -70,6 +70,11 @@ namespace EventCalendar
             DateTime end = GetDateTime(ends);
             bool isActive = DateTime.Now >= start && DateTime.Now <= end;
 
+            if (DateTime.Now > end)
+            {
+                return;
+            }
+            
             NextColumn(isActive);
             var blackColor = new Vector4(0.0f, 0.0f, 0.0f, 1.0f);
             ImGui.PushStyleColor(ImGuiCol.Button, blackColor);
@@ -77,6 +82,7 @@ namespace EventCalendar
             {
                 Dalamud.Utility.Util.OpenLink(url);
             }
+            ImGui.PopStyleColor();
             
             if (ImGui.IsItemHovered())
             {
@@ -88,11 +94,20 @@ namespace EventCalendar
             NextColumn(isActive);
             ImGui.TextWrapped(description);
             
-            NextColumn(isActive);
-            ImGui.Text(start.Date.ToString(CultureInfo.InvariantCulture));
+            //fix dates
+            var textStart = start.ToString(CultureInfo.InvariantCulture);
+            var textEnd = end.ToString(CultureInfo.InvariantCulture);
+            if (start.TimeOfDay == end.TimeOfDay)
+            {
+                textStart = start.ToShortDateString();
+                textEnd = end.ToShortDateString();
+            }
             
             NextColumn(isActive);
-            ImGui.Text(end.Date.ToString(CultureInfo.InvariantCulture));
+            ImGui.Text(textStart);
+            
+            NextColumn(isActive);
+            ImGui.Text(textEnd.ToString(CultureInfo.InvariantCulture));
             
             ImGui.TableNextRow();
         }
@@ -100,10 +115,11 @@ namespace EventCalendar
         private void NextColumn(bool isActive)
         {
             ImGui.TableNextColumn();
-            var vector = isActive
-                ? new Vector4(0.369f, 0.729f, 0.49f, 1.0f)
-                : new Vector4(0.933f, 0.247f, 0.267f, 1.0f);
-            ImGui.TableSetBgColor(ImGuiTableBgTarget.CellBg, ImGui.ColorConvertFloat4ToU32(vector));
+            if (isActive)
+            {
+                var green =  new Vector4(0.369f, 0.729f, 0.49f, 1.0f);
+                ImGui.TableSetBgColor(ImGuiTableBgTarget.CellBg, ImGui.ColorConvertFloat4ToU32(green));
+            }
         }
 
         private DateTime GetDateTime(EventDateTime eventDateTime)

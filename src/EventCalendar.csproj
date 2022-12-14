@@ -3,14 +3,14 @@
     <PropertyGroup>
         <Authors>Dreanor</Authors>
         <Company>Dreanor</Company>
-        <Version>1.1.0.0</Version>
+        <Version>1.1.1.0</Version>
         <Description>A calendar of in-game events and important dates from the lodestone</Description>
         <Copyright>(c) 2022 Dreanor</Copyright>
         <PackageProjectUrl>https://github.com/DreanorFFXIV/EventCalendar</PackageProjectUrl>
         <TargetFramework>net6.0-windows</TargetFramework>
         <LangVersion>9.0</LangVersion>
 		<RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
-		<PackageVersion>1.1.0.0</PackageVersion>
+		<PackageVersion>1.1.1.0</PackageVersion>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
 
