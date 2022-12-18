@@ -10,15 +10,17 @@ namespace EventCalendar
     {
         public string Name => "EventCalendar";
         private const string CommandName = "/events";
-        private PluginUI PluginUi { get; init; }
+        private PluginUI PluginUI { get; init; }
 
-        [PluginService] private DalamudPluginInterface PluginInterface { get; set; }
+        [PluginService]
+        private DalamudPluginInterface PluginInterface { get; set; }
 
-        [PluginService] private CommandManager CommandManager { get; set; }
+        [PluginService] 
+        private CommandManager CommandManager { get; set; }
 
         public Plugin()
         {
-            PluginUi = new PluginUI();
+            PluginUI = new PluginUI();
             PluginInterface.UiBuilder.Draw += DrawUI;
 
             CommandManager.AddHandler(CommandName, new CommandInfo(OnCommand)
@@ -30,18 +32,18 @@ namespace EventCalendar
         public void Dispose()
         {
             PluginInterface.UiBuilder.Draw -= DrawUI;
-            PluginUi.Dispose();
+            PluginUI.Dispose();
             CommandManager.RemoveHandler(CommandName);
         }
 
         private void DrawUI()
         {
-            PluginUi.Draw();
+            PluginUI.Draw();
         }
 
         private void OnCommand(string command, string args)
         {
-            PluginUi.Visible = true;
+            PluginUI.Visible = true;
         }
     }
 }

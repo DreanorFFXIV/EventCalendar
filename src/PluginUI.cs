@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Globalization;
 using System.Numerics;
 using Google.Apis.Calendar.v3.Data;
@@ -76,14 +75,8 @@ namespace EventCalendar
             }
             
             NextColumn(isActive);
-            var blackColor = new Vector4(0.0f, 0.0f, 0.0f, 1.0f);
-            ImGui.PushStyleColor(ImGuiCol.Button, blackColor);
-            if (ImGui.Button(title))
-            {
-                Dalamud.Utility.Util.OpenLink(url);
-            }
-            ImGui.PopStyleColor();
-            
+            CreateButton(title, url, isActive);
+
             if (ImGui.IsItemHovered())
             {
                 ImGui.BeginTooltip();
@@ -95,8 +88,8 @@ namespace EventCalendar
             ImGui.TextWrapped(description);
             
             //fix dates
-            var textStart = start.ToString(CultureInfo.InvariantCulture);
-            var textEnd = end.ToString(CultureInfo.InvariantCulture);
+            var textStart = start.ToString(CultureInfo.CurrentCulture);
+            var textEnd = end.ToString(CultureInfo.CurrentCulture);
             if (start.TimeOfDay == end.TimeOfDay)
             {
                 textStart = start.ToShortDateString();
@@ -104,12 +97,31 @@ namespace EventCalendar
             }
             
             NextColumn(isActive);
-            ImGui.Text(textStart);
+            ImGui.Text(textStart.ToString(CultureInfo.CurrentCulture));
             
             NextColumn(isActive);
-            ImGui.Text(textEnd.ToString(CultureInfo.InvariantCulture));
+            ImGui.Text(textEnd.ToString(CultureInfo.CurrentCulture));
             
             ImGui.TableNextRow();
+        }
+
+        private static void CreateButton(string title, string url, bool isActive)
+        {
+            if (isActive)
+            {
+                var blackColor = new Vector4(0.0f, 0.0f, 0.0f, 1.0f);
+                ImGui.PushStyleColor(ImGuiCol.Button, blackColor);
+            }
+
+            if (ImGui.Button(title))
+            {
+                Dalamud.Utility.Util.OpenLink(url);
+            }
+
+            if (isActive)
+            {
+                ImGui.PopStyleColor();
+            }
         }
 
         private void NextColumn(bool isActive)
@@ -131,7 +143,7 @@ namespace EventCalendar
             }
             else
             {
-                dateTime = DateTime.ParseExact(eventDateTime.Date, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+                dateTime = DateTime.ParseExact(eventDateTime.Date, "yyyy-MM-dd", CultureInfo.CurrentCulture);
             }
 
             return dateTime.ToLocalTime();
