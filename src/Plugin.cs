@@ -9,7 +9,7 @@ namespace EventCalendar
     public class Plugin : IDalamudPlugin
     {
         public string Name => "EventCalendar";
-        private const string CommandName = "/events";
+        private const string CommandName = "/evt";
         private PluginUI PluginUI { get; init; }
 
         [PluginService]
